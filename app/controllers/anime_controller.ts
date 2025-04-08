@@ -8,7 +8,8 @@ export default class AnimeController {
    */
    // Get all animes
   async index({ response }: HttpContext) {
-    
+    const animes = await Anime.all()
+    return response.json({ data: animes })
   }
 
   /**
