@@ -24,7 +24,14 @@ export default class AnimeController {
    */
   // Get one anime by ID
   async show({ params, response }: HttpContext) {
-    
+    try {
+      const anime = await Anime.findOrFail(params.id)
+      return response.json({ data: anime })
+    } catch (error) {
+      return response.status(404).json({
+        message: 'Anime not found'
+      })
+    }
   }
 
   /**
