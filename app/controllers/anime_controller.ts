@@ -81,7 +81,18 @@ export default class AnimeController {
    */
   // Hapus anime
   async destroy({ params, response }: HttpContext) {
-    
+    try {
+      const anime = await Anime.findOrFail(params.id)
+      await anime.delete()
+      
+      return response.json({
+        message: 'Anime deleted successfully'
+      })
+    } catch (error) {
+      return response.status(404).json({
+        message: 'Anime not found'
+      })
+    }
   }
   
 }
