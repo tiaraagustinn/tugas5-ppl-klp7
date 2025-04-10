@@ -17,7 +17,35 @@ export default class AnimeController {
    */
   // Create new anime
   async store({ request, response }: HttpContext) {
-    
+    const animeSchema = schema.create({
+      title: schema.string([
+        rules.required()
+      ]),
+      genre: schema.string([
+        rules.required()
+      ]),
+      tahun: schema.number(),
+      studio: schema.string.optional(),
+      score: schema.number.optional()
+    })
+
+    try {
+      // Validate request
+      const data = await request.validate({ schema: animeSchema })
+      
+      // Create anime
+      const anime = await Anime.create(data)
+      
+      return response.status(201).json({
+        message: 'Anime created successfully',
+        data: anime
+      })
+    } catch (error) {
+      return response.status(400).json({
+        message: 'Failed to create anime',
+        errors: error.messages || error
+      })
+    }
   }
 
   /**
